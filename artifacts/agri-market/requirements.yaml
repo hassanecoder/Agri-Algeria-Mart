@@ -1,0 +1,21 @@
+packages:
+  "framer-motion": "For smooth page transitions and component reveals"
+  "react-hook-form": "For robust form handling"
+  "@hookform/resolvers": "For Zod validation integration with forms"
+  "date-fns": "For formatting dates in market prices and profiles"
+  "lucide-react": "For beautiful consistent icons"
+
+images:
+  - path: "artifacts/agri-market/public/images/hero-farm.png"
+    description: "Cinematic, sunlit agricultural field in Algeria during golden hour, rolling hills, lush green crops, warm inviting atmosphere, high quality photography"
+    aspect_ratio: "16:9"
+  - path: "artifacts/agri-market/public/images/pattern-bg.png"
+    description: "Subtle, abstract geometric pattern representing agriculture, fields, and nature. Very light warm off-white and pale green tones, minimalist, seamless tile feel."
+    aspect_ratio: "1:1"
+  - path: "artifacts/agri-market/public/images/logo-icon.png"
+    description: "Modern minimalist logo mark for an agriculture marketplace. A stylized wheat stalk combining with a sun. Warm green and amber colors on a transparent/white background."
+    aspect_ratio: "1:1"
+
+notes:
+  - Using generated Orval hooks from @workspace/api-client-react
+  - Expecting DZD as currency

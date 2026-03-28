@@ -1,22 +1,33 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Algerian Agriculture Marketplace API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: products
+    description: Agricultural product listings
+  - name: categories
+    description: Product categories
+  - name: sellers
+    description: Farmer and seller profiles
+  - name: wilayas
+    description: Algerian administrative regions
+  - name: market-prices
+    description: Current market prices
+  - name: messages
+    description: Contact and inquiries
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +35,219 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List all products with optional filters
+      parameters:
+        - name: categoryId
+          in: query
+          schema:
+            type: string
+        - name: wilayaId
+          in: query
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          schema:
+            type: number
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+                  total:
+                    type: integer
+                required:
+                  - products
+                  - total
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create a new product listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProduct"
+      responses:
+        "201":
+          description: Created product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get a single product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [categories]
+      summary: List all product categories
+      responses:
+        "200":
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Category"
+                required:
+                  - categories
+
+  /sellers:
+    get:
+      operationId: listSellers
+      tags: [sellers]
+      summary: List all sellers/farmers
+      responses:
+        "200":
+          description: List of sellers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sellers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Seller"
+                required:
+                  - sellers
+
+  /sellers/{id}:
+    get:
+      operationId: getSeller
+      tags: [sellers]
+      summary: Get a seller profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Seller profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seller"
+
+  /wilayas:
+    get:
+      operationId: listWilayas
+      tags: [wilayas]
+      summary: List all Algerian wilayas
+      responses:
+        "200":
+          description: List of wilayas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wilayas:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Wilaya"
+                required:
+                  - wilayas
+
+  /market-prices:
+    get:
+      operationId: listMarketPrices
+      tags: [market-prices]
+      summary: Get current market prices for products
+      responses:
+        "200":
+          description: Market price listings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prices:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MarketPrice"
+                required:
+                  - prices
+
+  /messages:
+    post:
+      operationId: sendMessage
+      tags: [messages]
+      summary: Send a contact/inquiry message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMessage"
+      responses:
+        "201":
+          description: Message sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +258,286 @@ components:
       required:
         - status
 
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nameAr:
+          type: string
+        icon:
+          type: string
+        description:
+          type: string
+        productCount:
+          type: integer
+      required:
+        - id
+        - name
+        - nameAr
+        - icon
+        - description
+        - productCount
+
+    Wilaya:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: integer
+        name:
+          type: string
+        nameAr:
+          type: string
+        region:
+          type: string
+      required:
+        - id
+        - code
+        - name
+        - nameAr
+        - region
+
+    Seller:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        wilayaId:
+          type: string
+        wilayaName:
+          type: string
+        phone:
+          type: string
+        bio:
+          type: string
+        rating:
+          type: number
+        reviewCount:
+          type: integer
+        productCount:
+          type: integer
+        joinedAt:
+          type: string
+        verified:
+          type: boolean
+        profileImage:
+          type: string
+      required:
+        - id
+        - name
+        - wilayaId
+        - wilayaName
+        - phone
+        - bio
+        - rating
+        - reviewCount
+        - productCount
+        - joinedAt
+        - verified
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nameAr:
+          type: string
+        description:
+          type: string
+        categoryId:
+          type: string
+        categoryName:
+          type: string
+        sellerId:
+          type: string
+        sellerName:
+          type: string
+        wilayaId:
+          type: string
+        wilayaName:
+          type: string
+        price:
+          type: number
+        unit:
+          type: string
+        minOrder:
+          type: number
+        stock:
+          type: number
+        images:
+          type: array
+          items:
+            type: string
+        featured:
+          type: boolean
+        organic:
+          type: boolean
+        rating:
+          type: number
+        reviewCount:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - nameAr
+        - description
+        - categoryId
+        - categoryName
+        - sellerId
+        - sellerName
+        - wilayaId
+        - wilayaName
+        - price
+        - unit
+        - minOrder
+        - stock
+        - images
+        - featured
+        - organic
+        - rating
+        - reviewCount
+        - tags
+        - createdAt
+
+    CreateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+        nameAr:
+          type: string
+        description:
+          type: string
+        categoryId:
+          type: string
+        sellerId:
+          type: string
+        wilayaId:
+          type: string
+        price:
+          type: number
+        unit:
+          type: string
+        minOrder:
+          type: number
+        stock:
+          type: number
+        organic:
+          type: boolean
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - nameAr
+        - description
+        - categoryId
+        - sellerId
+        - wilayaId
+        - price
+        - unit
+        - minOrder
+        - stock
+        - organic
+
+    MarketPrice:
+      type: object
+      properties:
+        id:
+          type: string
+        productName:
+          type: string
+        productNameAr:
+          type: string
+        categoryName:
+          type: string
+        priceMin:
+          type: number
+        priceMax:
+          type: number
+        unit:
+          type: string
+        trend:
+          type: string
+          enum: [up, down, stable]
+        changePercent:
+          type: number
+        updatedAt:
+          type: string
+        wilayaName:
+          type: string
+      required:
+        - id
+        - productName
+        - productNameAr
+        - categoryName
+        - priceMin
+        - priceMax
+        - unit
+        - trend
+        - changePercent
+        - updatedAt
+        - wilayaName
+
+    CreateMessage:
+      type: object
+      properties:
+        senderName:
+          type: string
+        senderEmail:
+          type: string
+        senderPhone:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        recipientSellerId:
+          type: string
+      required:
+        - senderName
+        - senderEmail
+        - subject
+        - body
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        senderName:
+          type: string
+        senderEmail:
+          type: string
+        senderPhone:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        recipientSellerId:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - senderName
+        - senderEmail
+        - subject
+        - body
+        - createdAt
