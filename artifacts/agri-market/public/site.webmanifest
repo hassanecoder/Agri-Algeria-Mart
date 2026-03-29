@@ -1,0 +1,21 @@
+{
+  "name": "Marché Agricole Algérien",
+  "short_name": "Agri Algeria",
+  "description": "Discover Algeria's premier agricultural marketplace. Buy and sell fresh farm products, vegetables, fruits, grains, and dairy directly from Algerian farmers. Best prices and quality produce.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2D6A4F",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}
