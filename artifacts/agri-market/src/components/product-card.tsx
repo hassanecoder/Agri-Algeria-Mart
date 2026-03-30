@@ -6,7 +6,7 @@ import { MapPin, Star, Leaf, Scale } from "lucide-react";
 
 export function ProductCard({ product }: { product: Product }) {
   // Use first image or a placeholder
-  const imageUrl = product.images?.[0] || "https://images.unsplash.com/photo-1595859730520-ca92f15e865f?w=600&h=400&fit=crop";
+  const imageUrl = product.images?.[0] || "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&h=400&fit=crop";
 
   return (
     <Card className="group overflow-hidden rounded-2xl border-border/50 bg-white hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300 flex flex-col h-full">

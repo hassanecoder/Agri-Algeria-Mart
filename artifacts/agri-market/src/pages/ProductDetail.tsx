@@ -34,7 +34,7 @@ export default function ProductDetail() {
   if (isLoading) return <Layout><LoadingState message="Chargement du produit..." /></Layout>;
   if (error || !product) return <Layout><ErrorState error={error} /></Layout>;
 
-  const images = product.images?.length > 0 ? product.images : ["https://images.unsplash.com/photo-1595859730520-ca92f15e865f?w=1200&h=800&fit=crop"];
+  const images = product.images?.length > 0 ? product.images : ["https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1200&h=800&fit=crop"];
 
   return (
     <Layout>
